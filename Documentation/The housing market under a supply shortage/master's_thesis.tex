@@ -1,0 +1,196 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{a4}
+\usepackage[none]{hyphenat} %hyphenation
+\sloppy
+\usepackage{parskip} %no indentation after paragraphs
+\usepackage{umlaute}
+\usepackage{listings}
+\usepackage{afterpage} %for using \afterpage{\clearpage} (don't push images to the end of a chapter)
+\usepackage{makeidx}
+\usepackage[numbers]{natbib}
+\usepackage{graphicx}
+\usepackage{picins} %provides precise control over the placement of inline graphics
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{dsfont} %math symbols
+\usepackage{tabularx}
+\usepackage{floatflt} %float text around figures and tables
+% Florian Schulze, 06.06.2012
+% v1.0, latest edit: 06.06.2012
+
+\usepackage{enumitem} %resume counting from previous enumerate block
+\usepackage{amsmath,amssymb}
+\usepackage[format=default,font=footnotesize,labelfont=bf]{caption}
+\usepackage{listings} %for listing source code
+\usepackage{color}
+\usepackage{algpseudocode} %for listing pseudocode
+\usepackage{algorithm} %wrap algpseudocode and enrich with label etc.
+\usepackage{float} % for [H] after floats
+
+\titleformat{\paragraph}[hang]{\normalfont\bfseries}{\theparagraph}{.5em}{}
+
+\makeindex
+\frenchspacing
+\sloppy
+
+\pagestyle{headings}
+
+\textwidth16cm
+\textheight22cm
+
+\topmargin0cm
+\oddsidemargin0cm
+\evensidemargin0cm
+
+
+\newcommand{\bildklein}[3]{  
+	\begin{figure}[hp]
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{#1}
+	\end{center}
+	\caption[#2]{#3}
+	\end{figure}
+}
+  	
+\newcommand{\bildgross}[3]{  
+	\begin{figure}[hp]
+	\begin{center}
+	\includegraphics[width=0.95\textwidth]{#1}
+	\end{center}
+	\caption[#2]{#3}
+	\end{figure}
+}
+  
+
+\newcommand{\eqn}[3]{
+	\begin{figure}[hp]
+	\begin{equation}#1\end{equation}
+	\caption[#2]{#3}
+	\end{figure}
+}
+
+\input{figures/tumlogo}
+
+\begin{document}
+
+\nocite{*} %include uncited references in bibliography
+\hoffset=5mm
+\thispagestyle{empty}
+
+\begin{center}
+	\bigskip \bigskip \bigskip 
+	\oTUM{6.0cm} \\
+	\vspace*{0.8cm}
+	{\huge \bf Technische Universität} \\
+	\bigskip
+	{\huge \bf München} \\
+	\bigskip \bigskip \bigskip
+	{\huge \bf Fakultät für Informatik} \\
+	\bigskip \bigskip \bigskip
+	{\Large \bf Bachelor's Thesis in Informatik} \\
+	\bigskip \bigskip \bigskip \bigskip \bigskip
+	{\Large The housing market under a supply shortage} \\        
+	\bigskip \bigskip \bigskip \bigskip
+	{\Large Ricardo Sebastian Vera Jacob} \\    
+	\bigskip
+	\begin{figure}[ht]
+	\centering \includegraphics[width=0.2\linewidth]{figures/infologo.jpg}
+	\end{figure}
+	\bigskip 
+\end{center}
+
+\vfill
+
+\newpage
+\hoffset=5mm
+\thispagestyle{empty}
+
+\begin{center}
+	\bigskip \bigskip \bigskip 
+	\oTUM{6.0cm} \\
+	\vspace*{0.8cm}
+	{\huge \bf Technical University of} \\
+	\bigskip
+	{\huge \bf Munich} \\
+	\bigskip \bigskip \bigskip
+	{\huge \bf Department of Informatics} \\
+	\bigskip \bigskip \bigskip
+	{\Large \bf Bachelor's Thesis in Informatics} \\
+	\bigskip \bigskip \bigskip \bigskip \bigskip
+	{\Large The housing market under a supply shortages} \\
+	\bigskip \bigskip \bigskip
+	{\Large Der Wohnungsmarkt in einer Angebotsknappheit.} \\
+	\bigskip
+\end{center}
+\vfill
+
+\begin{tabular}{ll}
+{\Large \bf Author:} & {\Large Ricardo Sebastian Vera Jacob} \\\\
+{\Large \bf Supervisor:} & {\Large Prof. Dr. Martin Bichler} \\\\
+{\Large \bf Advisor:} & {\Large Donghao Zhu} \\\\
+{\Large \bf Submission:} & {\Large 28.02.2022}
+\end{tabular}
+
+\newpage	
+\thispagestyle{empty}
+\hoffset=0mm
+\vspace*{\fill}
+\noindent I assure the single handed composition of this master's thesis only supported by declared resources.\\\\
+Munich, 28.02.2022\\\\\\\\\\\\
+\noindent \textit{(Ricardo Sebastian Vera Jacob)}
+
+\newpage
+\thispagestyle{empty}
+\null
+
+\newpage
+\thispagestyle{empty}
+\hoffset=0mm
+\section*{Abstract}	
+\begin{spacing}{1.2}
+\input{abstracte}
+\end{spacing}
+
+\newpage
+\setcounter{page}{1}
+\hoffset=0mm
+\bibliographystyle{wmaainf} % quotation style
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+\fboxsep 0mm
+
+\tableofcontents
+
+\newpage
+\setlength{\baselineskip}{3ex}
+
+\begin{spacing}{1.15}
+	\input{Introduction}
+	\input{relatedwork}
+	\input{approach}
+	\input{simulation}
+	\input{conclusion}
+\end{spacing}
+\newpage
+\thispagestyle{empty}
+\null
+
+\newpage
+\addcontentsline{toc}{chapter}{List of figures}
+\listoffigures
+
+\newpage
+\addcontentsline{toc}{chapter}{Appendix}
+\appendix
+\input{appendices}
+
+\thispagestyle{empty}
+\null
+	
+% Generierung des Literaturverzeichnisses
+\newpage
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{citations.bib}
+
+\end{document}

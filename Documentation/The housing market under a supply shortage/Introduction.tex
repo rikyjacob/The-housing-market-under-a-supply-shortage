@@ -1,0 +1,86 @@
+\chapter{Introduction}
+This paper will examine the supply-demand chain in the housing market with an inclination towards high demand and low supply. Some great examples of these type of markets are: Vienna, Munich, New York or London among others. Where the demand for apartments is significantly higher than the actual market supply and chances of finding accommodation at a fair price at said locations are often very slim or non existent. With citizens usually having to take the first and often only offer they get for accommodation. This can cause an inefficient distribution of residences across the city or even having to search for accommodation in the suburbs and leaving the city housing market causing long commutes and wasted time. The purpose of this paper is to understand the current situation of the over saturation of the market better. 
+Specifically we will focus our attention to the allocation of residences under the adoption of the approaches a citizen has to find accommodation. From using a private real estate agent to getting a social subsidised residence. With the isolation of the market into several categories, we can then observe how and where agents find accommodation and thus examine the distribution and behaviour of the system. Then we can define the key variables that cause such distributions and from there observe the behaviour under changing factors.
+
+Moreover with the help of this model, literature and simulations we will be able to observe the behaviour of the system, draw conclusion and alter the model variables in order to simulate other situations of the market as changes in the supply-demand chain. From now on instead of referring to people, landlords or citizens we will refer to them as agents. This will avoid confusion and redundancy. We will develop a model that emulates the market as close as possible with the help of probabilistic tools as poison processes and exponential distributions, to design the arrival and exit of agents in the market and implement an algorithm for the assigning of residences to the agents. 
+
+An agent is defined as an entity that entered the market with the goal of finding accommodation and stay in the current market. In order to achieve that the agent counts with several variables and data structures. First he has a maximum waiting time. This time is calculated by a exponential distribution
+\begin{equation} \label{eq1}
+{\displaystyle \operatorname {E} [X]={\frac {1}{\lambda}}}
+\end{equation} 
+Where $\lambda$ represents the average waiting time. The agent has said time to find accommodation and if he runs out of it he "perishes" and has to leave the market without success. In this case we can define $\lambda$ as 10 to simplify the model. An agent also has a list of all matched apartments that he can consult at any time and from those choose to take one. With these set of variables he can now enter the market, but first we have to define how the market works and how it is divided.
+
+To approximate the model as close as possible to reality we will define three categories in which agents can actively search for accommodation:
+\begin{itemize}
+        \item \textbf{Category 1}: government non-profit subsidised organizations as "Studentenwerk" in Germany that offer cheap alternatives but long waiting times. Low supply and very high demands, with waiting times ranging from one to three years but in the end this is the category where agents maximise their utility (cheapest option)
+        \item \textbf{Category 2}: free advertising platforms such as immocheck24, Facebook groups, wg-gesucht or newspapers and any other form of direct contact landlord-agent are enclosed into this category. This alternative offer a direct contact from the landlords to the tenants. With the assumption that this is by far the most common used platform to find accommodation.
+        \item \textbf{Category 3}: real estate agents that are usually the most expensive option but often the one with highest chances of success. With lower demand but higher (pricier) supply.
+\end{itemize}
+
+Additionally each of these categories has a set of variables and independent matching system that in the end form the supply pool of apartments. For this we will define their variables and matching conditions. Next we will describe their working structure starting with category 1.
+
+For a agent to get public accommodation certain criteria has to be fulfilled. First the agent has to be actively searching for accommodation and still have time until he has to leave the market. Then he enters a first come first served (FCFS) queue with other agents and has to wait until a house is matched to him. This process can only assign accommodation to the agents if there are enough available supply of apartments and when new apartments join the market. We can deduce that the probability \textbf{pMC1} of getting \textbf{M}atched to an apartment depends on the length of the queue and the supply of the market. In that case the agent in the first position of the queue gets the apartment matched to him, then the agent has a probability \textbf{pTC1} of \textbf{T}aking said apartment. If the agent doesn't take said apartment he goes back to the queue and has to wait again until another opportunity arises.
+
+On the other hand if an agent wants to enter the social housing market or category 2 the process changes. Here the searching agent applies for all available apartments and has a probability \textbf{pMC2} of being successfully matched to said apartment. Since it is of self interest of the agent to get accommodation firstly in category 1 (since as mentioned in the description of the categories this option offers a higher utility for the agent) it will wait until he has no time left before he has to leave the market. At the time he has to leave the market he will then search in the apartments he got matched to in category 2 and then choose one that is still available. If there are no available apartments the agent leaves the market. If there is an apartment available he has the probability \textbf{pTC2} of taking the apartment. This probability depends on the supply of apartments in the market and the demand.
+
+The last category is used by agents only when they are about to perish and are desperate for accommodation and couldn't find an apartment by any means. They would apply to the market with matching probability \textbf{pMC3}. Here The probability of being matched is the highest in the market but the probability of taking said apartment is the lowest \textbf{pTC3}. They would have the choice of taking the accommodation with a lower probability than in Category 1 (C1) and in Category 2 (C2) but the matching probability is higher. 
+
+Hence we can assume a set of  axioms to further specify the market. The matching probability in the market is defined as:
+\begin{equation} \label{eq2}
+pMC1 \subset pMC2 \subset pMC3.
+\end{equation} 
+The lower the category the less probable is to get matched to an apartment. For the probability of taking said matched apartment is defined as:
+\begin{equation} \label{eq3}
+pTC3 \subset pTC2 \subset pTC1.
+\end{equation}
+Where the agent would almost immediately take accommodation in the public endorsed sector. In this case the lower the category the most likely it is for the agent to take the matched apartment. Lastly for the cardinality of the supply of apartments in each category will be defined as follows:
+\begin{equation} \label{eq4}
+C1 \subset C3 \subset C2.
+\end{equation}
+Here the category with highest supply is C2 with C1 being the one with the lowest supply.
+
+Now we have to define the way in which agents arrive to the market. The housing market is a highly fluctuating market, with agents coming and leaving. The same can be said for the apartments with the exception that the probability of a new apartment coming to the market is lower. For this purpose we will model the arrival of agents/apartments with the help of a poison process. 
+\begin{equation} \label{eq5}
+P(t, \lambda) = \frac{\lambda^t e^{-\lambda}}{t!} 
+\end{equation}
+For this, t represents the time units and $\lambda$ the mean average. Since time is equal for the market the only variable we can modify for each category is $\lambda$. Since described in the formula \ref{eq4} the lambdas can be derived from the cardinality of the categories. With the following equation:
+\begin{equation} \label{eq6}
+\lambda C1 \subset \lambda C3 \subset \lambda C2
+\end{equation}
+
+This way we ensure that at every point in time the cardinality of the groups is maintained. In this model the supply side of the market is divided but the demand side is shared across the different categories so for the modeling of the arrival of the agents we only need one variable, thus being $\lambda$A. For this with the help of the last equation we can expand it to include the arrival of the agents and assume that there is always more or equal demand than there is supply:
+\begin{equation} \label{eq7}
+\lambda C1 + \lambda C2 + \lambda C3 \subseteq \lambda A
+\end{equation}
+With this we ensure that at any given point in time the demand for apartments is grater or equal to the supply. This with the purpose of simulating the case exposed before in the introduction of a market overly saturated in the demand side.
+
+Furthermore with the defined set of variables and axioms we can define a global function to describe the demand and supply side of the model, that we can alter in order to observe the changes over time. The supply side of the model is a three tuple function of :
+\begin{equation} \label{eq8}
+S(\lambda C1, \lambda C2, \lambda C3)
+\end{equation}
+While the demand side of the model is a seven tuple function:
+\begin{equation} \label{eq9}
+D(\lambda A, pTC1, pTC2, pTC3, pMC1, pMC2, pMC3)
+\end{equation}
+With this, we can then alter each individual variable in order to observe the changes in the market. The last step is to empirically search for a point in time where the market converges. Then we can model the market over a changing probability or a changing $\lambda$ as the x axis.
+
+Finally with the model developed and having defined a converging threshold in the market we can plot the data. For this we need to define some values or key performance indicators (KPIs) that we want to observe. This would be in the way of ratios indicating the proportions of agents that left the market or stayed. Moreover we can also plot over the average waiting times. For the ratios the main ones we will focus our attention on are:
+\begin{equation} \label{eq9}
+Left = \frac{agents \; that \; left \; the \; market}{arrived \; agents}
+\end{equation}
+\begin{equation} \label{eq9}
+Stayed = \frac{agents \; that \; stayed \; in \; the \; market}{arrived \; agents}
+\end{equation}
+
+On the next chapters of this paper we will explain in more detail the model and define the needed tools in a more detailed way, then we will present an interpretation of this model in a simulation and explain the approach we took in the code. Then we will show simulation results and data on the model. At the end we will draw conclusions and propose ways in which the model can be improved and expanded in order to be more accurate.
+
+\section{Motivation}
+The housing market is a highly present subject in the life of everyone. With almost 60\% of all the inhabitants of earth living in cities, the reach of a study in this sector could have a great effect on a large number of people. As cities are growing and more people choosing to live in cities the market is getting more demand but not necessarily more supply.
+
+As someone who has lived his entire life in a city where the demand exceeds the supply and seen the effects of over saturation in the demand I was very interested in this subject. Knowing cases of people having to take apartments in the suburbs and leaving the city because of lack of supply truly left me wondering of how the market works and if we could understand it better.
+
+
+\section{Goal}
+With this paper we expect to better understand the behaviour of subjects in the housing market under said circumstances as well as its outcome on different environments with contrasting probabilities and variables. Then we can compare how the distribution of the experiment contrast with alternative settings and apply the model to a real world case.
+
+Finally we should be able to develop a model that can be easily modified and improved. This with the purpose of offering a platform to try new scenarios and expand on and enable further research.
